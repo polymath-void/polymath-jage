@@ -1,3 +1,4 @@
 node_modules/
 .jsagent/
 .env
+agent_project_memory.md

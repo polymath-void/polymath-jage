@@ -2,3 +2,4 @@ node_modules/
 .jsagent/
 .env
 tests/
+agent_project_memory.md
