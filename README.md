@@ -1,5 +1,8 @@
 # polymath-jage (Codebase Manager)
 
+[![NPM Version](https://img.shields.io/npm/v/polymath-jage.svg)](https://www.npmjs.com/package/polymath-jage)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-polymath--void%2Fpolymath--jage-blue)](https://github.com/polymath-void/polymath-jage)
+
 A robust, platform-independent, zero-dependency Universal Codebase Manager. `polymath-jage` brings a purely deterministic, content-addressable semantic version control system to your entire workspace.
 
 Designed for the modern era of massive architectures, it moves beyond traditional line-by-line diffing. Instead, it mathematically deconstructs your code into structural semantic blocks (Functions, Classes, Markdown Headers) and orchestrates them across an infinite-depth swarm network.
