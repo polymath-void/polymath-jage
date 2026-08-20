@@ -1,0 +1,16 @@
+{
+  "name": "polymath-jage",
+  "version": "1.0.0",
+  "description": "A zero-dependency universal semantic AST version control and orchestration engine",
+  "main": "index.js",
+  "bin": {
+    "jage": "bin/jage.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Rahman Shuvo --polymath-void",
+  "license": "MIT",
+  "type": "module"
+}
