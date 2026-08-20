@@ -1,9 +1,9 @@
-#!/data/data/com.termux/files/usr/bin/env node
+#!/usr/bin/env node
 
 import { runInit } from '../src/commands/init.js';
 import { runPush } from '../src/commands/push.js';
 import { isInitialized, getConfig } from '../src/core/config.js';
-import { Logger, Colors } from '../src/core/logger.js';
+import { Logger } from '../src/core/logger.js';
 
 function printStatus() {
   if (!isInitialized()) return;
@@ -14,34 +14,64 @@ function printStatus() {
   Logger.divider();
 }
 
+function showHelp() {
+  console.log(`
+polymath-jage (Codebase Manager) v1.0.0
+A zero-dependency universal semantic AST version control and orchestration engine.
+
+Usage:
+  jage <command> [options]
+
+Available Commands:
+  init      Initialize a new jage repository in the current directory.
+            (Auto-binds to Root Swarms if initialized in a sub-directory)
+            
+  push      Scan codebase, generate Semantic AST hashes, and push to database.
+            (Deduplicates blocks and automatically syncs with Symbiotic Nodes)
+
+Options:
+  -h, --help    Show this help message
+  --debug       Enable debug logging
+
+Examples:
+  $ jage init
+  $ jage push
+  $ jage push --debug
+  `);
+}
+
 const args = process.argv.slice(2).filter(arg => arg !== '--debug');
 const command = args[0];
-const cmdArgs = args.slice(1);
 
-switch (command) {
-  case 'init':
-  case 'update':
-    runInit();
-    printStatus();
-    break;
+if (!command || command === 'help' || command === '--help' || command === '-h') {
+  showHelp();
+} else {
+  switch (command) {
+    case 'init':
+    case 'update':
+      runInit();
+      printStatus();
+      break;
 
-  case 'push':
-    runPush();
-    printStatus();
-    break;
+    case 'push':
+      runPush();
+      printStatus();
+      break;
 
-  case 'fetch':
-    Logger.info('Fetching codebase inconsistencies (Drift Analysis)... [WIP]');
-    break;
+    case 'fetch':
+      Logger.info('Fetching codebase inconsistencies (Drift Analysis)... [WIP]');
+      break;
 
-  case 'revert':
-    Logger.info('Reverting to previous AST schema state... [WIP]');
-    break;
+    case 'revert':
+      Logger.info('Reverting to previous AST schema state... [WIP]');
+      break;
 
-  case 'downgrade':
-    Logger.info(`Downgrading semantic blocks to v${cmdArgs[0]}... [WIP]`);
-    break;
+    case 'downgrade':
+      Logger.info(`Downgrading semantic blocks... [WIP]`);
+      break;
 
-  default:
-    console.log('Usage: jage <init|update|push|fetch|revert|downgrade> [--debug]');
+    default:
+      console.log('Unknown command.');
+      showHelp();
+  }
 }

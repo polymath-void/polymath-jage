@@ -1,6 +1,6 @@
 {
   "name": "polymath-jage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A zero-dependency universal semantic AST version control and orchestration engine",
   "main": "index.js",
   "bin": {
