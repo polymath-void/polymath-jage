@@ -2,6 +2,8 @@
 
 import { runInit } from '../src/commands/init.js';
 import { runPush } from '../src/commands/push.js';
+import { runDaemon } from '../src/commands/daemon.js';
+import { runRevert } from '../src/commands/revert.js';
 import { isInitialized, getConfig } from '../src/core/config.js';
 import { Logger } from '../src/core/logger.js';
 
@@ -28,6 +30,12 @@ Available Commands:
             
   push      Scan codebase, generate Semantic AST hashes, and push to database.
             (Deduplicates blocks and automatically syncs with Symbiotic Nodes)
+            Use --analyze to compute blast radius warnings.
+            
+  revert    node <file>:<block> --version=<v#>
+            Surgically revert a single AST node to a previous version.
+            
+  daemon    <start|stop> Run jage push continuously in the background
 
 Options:
   -h, --help    Show this help message
@@ -36,7 +44,9 @@ Options:
 Examples:
   $ jage init
   $ jage push
-  $ jage push --debug
+  $ jage push --analyze
+  $ jage revert node push.js:js_block_runPush --version=3
+  $ jage daemon start
   `);
 }
 
@@ -58,12 +68,16 @@ if (!command || command === 'help' || command === '--help' || command === '-h') 
       printStatus();
       break;
 
+    case 'daemon':
+      runDaemon(args[1]);
+      break;
+
     case 'fetch':
       Logger.info('Fetching codebase inconsistencies (Drift Analysis)... [WIP]');
       break;
 
     case 'revert':
-      Logger.info('Reverting to previous AST schema state... [WIP]');
+      runRevert(args.slice(1));
       break;
 
     case 'downgrade':

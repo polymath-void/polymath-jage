@@ -4,6 +4,9 @@ import crypto from 'crypto';
 import { CWD, IGNORE_DIRS, TRACKED_EXTENSIONS, getConfig, saveConfig, getLedger, saveLedger, JSAGENT_DIR } from '../core/config.js';
 import { parseSemanticBlocks } from '../core/parser.js';
 import { Logger } from '../core/logger.js';
+import { buildDependencyGraph, computeBlastRadius, saveGraph, loadGraph, formatBlastRadius } from '../core/graph.js';
+import { saveSnapshot } from '../core/snapshots.js';
+import { runLint } from '../plugins/android-linter.js';
 
 function getParentChain(agentDir) {
   const chain = [];
@@ -134,6 +137,19 @@ export function runPush() {
   
   const localAgentDir = JSAGENT_DIR;
   const rootAgentDir = config.parent_node || JSAGENT_DIR;
+
+  // Pre-push: Android Linter (if res/ directory exists)
+  const resDir = path.join(CWD, 'res');
+  if (fs.existsSync(resDir)) {
+    const lintResult = runLint(CWD);
+    if (!lintResult.passed) {
+      process.exitCode = 1;
+      return;
+    }
+  }
+  
+  // Load previous graph for --analyze comparison
+  const previousGraph = loadGraph();
   
   Logger.info('Scanning semantic diffs and generating Content-Addressable Blobs...');
   scanAndPush(CWD, localAgentDir, rootAgentDir);
@@ -150,9 +166,33 @@ export function runPush() {
   config.version += 1;
   saveConfig(config);
   
+  // Save schema snapshot for this version
+  saveSnapshot(config.version);
+  
   const ledger = getLedger();
   ledger.push(`[v${config.version}] ACTION: PUSH_AST_SYNC (Swarm Mapped)`);
   saveLedger(ledger);
+  
+  // Build and save dependency graph
+  const currentGraph = buildDependencyGraph(CWD);
+  saveGraph(currentGraph);
+  
+  // Analyze blast radius if --analyze flag is present
+  if (process.argv.includes('--analyze') && previousGraph) {
+    const modifiedNodes = [];
+    for (const [nodeId, node] of Object.entries(currentGraph.nodes)) {
+      const prevNode = previousGraph.nodes[nodeId];
+      if (!prevNode) {
+        modifiedNodes.push(nodeId); // new node
+      }
+    }
+    // Also check for changed hashes via schema comparison
+    if (modifiedNodes.length > 0) {
+      const affected = computeBlastRadius(currentGraph, modifiedNodes);
+      const report = formatBlastRadius(modifiedNodes, affected, currentGraph);
+      console.log(report);
+    }
+  }
   
   Logger.success(`Codebase successfully pushed to v${config.version}.`);
   Logger.success('Semantic blocks deduplicated via Symbiotic Node Hashing.');

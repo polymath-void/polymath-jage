@@ -10,7 +10,7 @@ export const OBJECTS_DIR = path.join(JSAGENT_DIR, 'objects');
 export const LEDGER_FILE = path.join(HISTORY_DIR, 'ledger.json');
 
 export const IGNORE_DIRS = ['node_modules', '.git', '.jsagent', 'dist', 'build', 'target'];
-export const TRACKED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx', '.py', '.c', '.cpp', '.java', '.md'];
+export const TRACKED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx', '.py', '.c', '.cpp', '.java', '.md', '.xml', '.kt'];
 
 export function isInitialized() {
   return fs.existsSync(JSAGENT_DIR);

@@ -8,7 +8,7 @@ function parseJSBlocks(content) {
   let skeleton = content;
   
   // Advanced regex to detect top-level functions, classes, and arrow functions
-  const declarationRegex = /^(?:export\s+)?(?:default\s+)?(?:async\s+)?(?:function\*?\s+([a-zA-Z0-9_]+)|class\s+([a-zA-Z0-9_]+)|(?:const|let|var)\s+([a-zA-Z0-9_]+)\s*=\s*(?:async\s*)?(?:\([^)]*\)|[a-zA-Z0-9_]+)\s*=>)\s*\{?/gm;
+  const declarationRegex = /^(?:export\s+)?(?:default\s+)?(?:async\s+)?(?:function\*?\s+([a-zA-Z0-9_]+)|class\s+([a-zA-Z0-9_]+)|(?:const|let|var)\s+([a-zA-Z0-9_]+)\s*=\s*(?:async\s*)?(?:\([^\)]*\)|[a-zA-Z0-9_]+)\s*=>)\s*\{?/gm;
   
   let match;
   const extractors = [];

@@ -2,3 +2,7 @@ node_modules/
 .jsagent/
 .env
 agent_project_memory.md
+.agents/
+blueprints/
+ANDROID_LINTER_IMPL_PLAN.md
+jage_features_blueprint.md
