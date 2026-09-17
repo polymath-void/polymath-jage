@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/data/data/com.termux/files/usr/bin/env node
 
 import { runInit } from '../src/commands/init.js';
 import { runPush } from '../src/commands/push.js';
